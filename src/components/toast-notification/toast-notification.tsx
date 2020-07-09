@@ -15,7 +15,7 @@ export interface ToastMessageProps extends ToastBaseProps {
 }
 
 export interface ToastStyleProps extends ToastBaseProps {
-  hasDescription: boolean;
+  hasDescription: number;
 }
 
 export interface ToastNotificationProps {
