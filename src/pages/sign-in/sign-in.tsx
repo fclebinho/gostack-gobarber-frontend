@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -9,7 +9,8 @@ import { useAuth } from '../../hooks';
 import { getValidatorError } from '../../utils/validator-error';
 import logo from '../../assets/images/logo.svg';
 import { Container, Content, AnimationContent, Background } from './styles';
-import { Input, Button, useToast } from '../../components';
+import { Input, Button } from '../../components';
+import { useToast } from '../../components/toast-notification/toast-hooks';
 
 export interface SignInFormDataProps {
   email: string;
@@ -20,6 +21,7 @@ export const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useAuth();
   const { addToast } = useToast();
+  const history = useHistory();
 
   const handleSubmit = useCallback(
     async (data: SignInFormDataProps): Promise<void> => {
@@ -39,10 +41,7 @@ export const SignIn: React.FC = () => {
           password: data.password,
         });
 
-        addToast({
-          title: 'Login realizado com sucesso.',
-          type: 'success',
-        });
+        history.push('/');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidatorError(err);
@@ -57,7 +56,7 @@ export const SignIn: React.FC = () => {
         });
       }
     },
-    [signIn, addToast],
+    [signIn, addToast, history],
   );
 
   return (

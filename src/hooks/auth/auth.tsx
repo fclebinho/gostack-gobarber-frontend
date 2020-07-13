@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import { api } from '../../services';
 
 interface User {
@@ -29,7 +28,6 @@ export interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const history = useHistory();
   const [data, setData] = useState<AuthDataProps>(() => {
     const token = localStorage.getItem('@GoBarber:token');
     const user = localStorage.getItem('@GoBarber:user');
@@ -42,24 +40,20 @@ export const AuthProvider: React.FC = ({ children }) => {
     return {} as AuthDataProps;
   });
 
-  const signIn = useCallback(
-    async ({ email, password }) => {
-      const response = await api.post('sessions', {
-        email,
-        password,
-      });
+  const signIn = useCallback(async ({ email, password }) => {
+    const response = await api.post('sessions', {
+      email,
+      password,
+    });
 
-      const { token, user } = response.data;
-      localStorage.setItem('@GoBarber:token', token);
-      localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+    const { token, user } = response.data;
+    localStorage.setItem('@GoBarber:token', token);
+    localStorage.setItem('@GoBarber:user', JSON.stringify(user));
 
-      api.defaults.headers.authorization = `Bearer ${token}`;
+    api.defaults.headers.authorization = `Bearer ${token}`;
 
-      setData({ token, user });
-      history.push('/');
-    },
-    [history],
-  );
+    setData({ token, user });
+  }, []);
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@GoBarber:token');
