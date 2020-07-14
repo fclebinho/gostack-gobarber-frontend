@@ -3,7 +3,6 @@ import {
   Route,
   RouteProps as ReactDOMRouteProps,
   Redirect,
-  useHistory,
 } from 'react-router-dom';
 
 import { useAuth } from '../../hooks';
